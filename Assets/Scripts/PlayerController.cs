@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 {
  
     public float forwardSpeed = 5f;
-    public float laneDistance = 2f; //þeritler arasý
+    public float laneDistance = 0.1f; //þeritler arasý
     public float jumpForce = 300f;
     private bool isGrounded ;
     private int currentLane = 1;  //oyuncunun bulunduðu þerit
@@ -17,8 +17,8 @@ public class PlayerController : MonoBehaviour
 
     public float initialForwardSpeed = 1f; //Ýlerleme hýzý
     public float maxForwardSpeed = 25f; // maksimum hýz
-    public float accelerationRate = 0.01f; // hýz artýþ oraný
-    public float slideSpeed = 0.001f;
+    public float accelerationRate = 0.001f; // hýz artýþ oraný
+    public float slideSpeed = 0.0001f;
     public float raycastDistance = 1.1f; // Raycast mesafesi
 
 
@@ -313,7 +313,7 @@ public class PlayerController : MonoBehaviour
     {
         // oyuncuyu merkze doðru hareket ettirmek için:
         Vector3 targetPosition = new Vector3(0f, transform.position.y, transform.position.z);
-        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 6f);
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 2f);
 
        //oyuncu merkeze yaklaþtý mý 
         if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
