@@ -2259,7 +2259,7 @@ MonoBehaviour:
   - {fileID: 7857541631103409558, guid: 2a881f4adcc97134bb9f823b0aa011c3, type: 3}
   - {fileID: 8573250843481042238, guid: 0ddc4d8e908d3cb46b27707823330a6b, type: 3}
   - {fileID: 5308927289924501778, guid: c4693b7aa84749d4791f6e909012127b, type: 3}
-  wayLength: 10
+  wayLength: 50
   numberOfWays: 5
   activeWays: []
   playerTransform: {fileID: 692124108}
