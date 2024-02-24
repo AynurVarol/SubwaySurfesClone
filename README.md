@@ -9,14 +9,14 @@ Bu proje, Unity de 3D olarak C# ile geliştirilmiş bir Subway Surfers klonudur.
 
 ### Oyun Mekaniği
 - **Sonsuz Oyun:** Oyun, ileri gitmek için bir tuş kontrolüne ihtiyaç duymadan sonsuz bir şekilde ilerlemektedir.
--**Zorluk Seviyeleri:** Oyun içinde rampa ile çıkılıp üst katta gezme mekaniği, engellerin altından eğilerek geçebilme ya da üstlerinden zıplayarak geçebilme mekanikleri bulunmaktadır. Seviyeler rastgele bir biçimde oluşmaktadır.
+- **Zorluk Seviyeleri:** Oyun içinde rampa ile çıkılıp üst katta gezme mekaniği, engellerin altından eğilerek geçebilme ya da üstlerinden zıplayarak geçebilme mekanikleri bulunmaktadır. Seviyeler rastgele bir biçimde oluşmaktadır.
 
 ### Can ve Skor Sistemi
--**Can Sistemi:** Oyuncunun üç çarpma hakkı bulunmaktadır. Oyuncunun her çarpışmasında karakter birkaç saniyeliğine hareketsizleşmekte ve karakterin rengi değişmektedir.
--**Skor Sistemi:** Oyun içinde oyuncunun ilerlediği mesafe arttıkça oyuncunun oyun skoru da artmaktadır. Oyuncunun oyun içindeki skorları kaydedilir ve eğer oyuncu kendi en yüksek skorunu geçebilirse skor göstergesinin rengi değişmektedir.
+- **Can Sistemi:** Oyuncunun üç çarpma hakkı bulunmaktadır. Oyuncunun her çarpışmasında karakter birkaç saniyeliğine hareketsizleşmekte ve karakterin rengi değişmektedir.
+- **Skor Sistemi:** Oyun içinde oyuncunun ilerlediği mesafe arttıkça oyuncunun oyun skoru da artmaktadır. Oyuncunun oyun içindeki skorları kaydedilir ve eğer oyuncu kendi en yüksek skorunu geçebilirse skor göstergesinin rengi değişmektedir.
 
 ### Ek Özellikler
--**Altın Toplama:** Oyundaki altınlar dönme animasyonuna sahiptir. Oyuncu altınları toplayabilir ve bu sayede puan kazanabilir.
+- **Altın Toplama:** Oyundaki altınlar dönme animasyonuna sahiptir. Oyuncu altınları toplayabilir ve bu sayede puan kazanabilir.
 
 ## Nasıl Oynanır?
 1. Bu depoyu bilgisayarınıza klonlayın.
