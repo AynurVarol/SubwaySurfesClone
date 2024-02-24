@@ -8,8 +8,8 @@ public class PlayerController : MonoBehaviour
 {
  
     public float forwardSpeed = 5f;
-    public float laneDistance = 0.1f; //þeritler arasý
-    public float jumpForce = 300f;
+    public float laneDistance = 2f; //þeritler arasý
+    public float jumpForce = 15f;
     private bool isGrounded ;
     private int currentLane = 1;  //oyuncunun bulunduðu þerit
     public Rigidbody rb;
@@ -18,8 +18,14 @@ public class PlayerController : MonoBehaviour
     public float initialForwardSpeed = 1f; //Ýlerleme hýzý
     public float maxForwardSpeed = 25f; // maksimum hýz
     public float accelerationRate = 0.001f; // hýz artýþ oraný
-    public float slideSpeed = 0.0001f;
+    public float slideSpeed = 10f;
     public float raycastDistance = 1.1f; // Raycast mesafesi
+
+    // oyuncunun rotasyonu
+    private bool isRotating = false;
+
+
+
 
 
     private bool hasJumped = false;
@@ -37,6 +43,7 @@ public class PlayerController : MonoBehaviour
 
     private bool playerCanTakeDamage = true;
     private Color originalColor;
+
 
 
     private void Start()
@@ -82,6 +89,21 @@ public class PlayerController : MonoBehaviour
         {
             CenterPlayer();
         }
+        //Zýplama kontrolü
+        if (Input.GetKeyDown(KeyCode.UpArrow) && isGrounded)
+        {
+            Jump();
+            // Engelin üzerinden zýpladýktan sonrasý için  kontrol
+            CheckIfGroundedAfterJump();
+
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            RotatePlayerDirectly();
+        }
+
+
+
 
 
 
@@ -109,18 +131,23 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D) || horizontalInput > 0)  
         {
             MoveLane(1); // Saða kaydýrma
+
+            Slide();
         }
         else if (Input.GetKeyDown(KeyCode.A) || horizontalInput < 0) 
         {
             MoveLane(-1); // Sola kaydýrma
+
+            Slide();
         }
-        //Zýplama kontrolü
+        /*Zýplama kontrolü
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             Jump();
             // Engelin üzerinden zýpladýktan sonrasý için  kontrol
             CheckIfGroundedAfterJump();
-        }
+        }*/
+
         // C ye basýnca oyuncuyu merkeze getir
         if (Input.GetKeyDown(KeyCode.C)&& !isCentering)
         {
@@ -139,7 +166,7 @@ public class PlayerController : MonoBehaviour
         int targetLane = currentLane + direction;
 
         // Geçerli þerit aralýðýný kontrol etme
-        if (targetLane < -2 || targetLane > 2)
+        if (targetLane < -4 || targetLane > 4)
         {
             return;
         }
@@ -191,37 +218,52 @@ public class PlayerController : MonoBehaviour
         /// Zýplama 
         /// </summary>
 
-        private void Jump()
-        {
-            Debug.Log("zýplama");
-            rb.AddForce(Vector3.up * jumpForce);
-            isGrounded = false;
-             hasJumped = true;
-            
-        }
+   private void Jump()
+   {
+        Debug.Log("zýplama");
 
-        private void Slide()
-        {
-            // Kayma animasyonunu baþlat
-            isSliding = true;
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z); // Önce diðer yükseklik bileþenlerini sýfýrla
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // Zýplama kuvvetini ekle
+        isGrounded = false;
+        //rb.AddForce(Vector3.up * jumpForce);
+        //isGrounded = false;
+        hasJumped = true;
 
-        }
+
+   }
+
+    private void Slide()
+    {
+         // Kayma animasyonunu baþlat
+        isSliding = true;
+        // Saða veya sola kayma hýzý
+        float slideMovement = slideSpeed * Time.deltaTime;
+
+        // Hedef pozisyonu belirle
+        Vector3 targetPosition = new Vector3(currentLane * laneDistance, transform.position.y, transform.position.z);
+
+        // Yeni pozisyonu kayma hýzýyla belirtilen yöne doðru hareket ettir
+        transform.position = Vector3.Lerp(transform.position, targetPosition, slideMovement);
+
+    }
 
         private void StopSliding()
         {
             // Kayma animasyonunu durdur
             isSliding = false;
+           
+
         }
 
 
 
-       /* private void MoveSideways(float input)
-        {
-            float newPosition = transform.position.x + input * slideSpeed;
-          transform.position = new Vector3(newPosition, transform.position.y, transform.position.z);
-        }*/
+    /* private void MoveSideways(float input)
+     {
+         float newPosition = transform.position.x + input * slideSpeed;
+       transform.position = new Vector3(newPosition, transform.position.y, transform.position.z);
+     }*/
 
-        private void MoveForward()
+    private void MoveForward()
         {
          Vector3 forwardMovement = transform.forward *forwardSpeed* Time.deltaTime;
          rb.MovePosition(rb.position + forwardMovement);
@@ -239,7 +281,7 @@ public class PlayerController : MonoBehaviour
 
             //oyuncunun hýzýný sýnýrlamak için;
 
-            forwardSpeed = Mathf.Clamp(initialForwardSpeed, forwardSpeed, maxForwardSpeed);
+            forwardSpeed = Mathf.Clamp( forwardSpeed, initialForwardSpeed, maxForwardSpeed);
         }
 
 
@@ -302,7 +344,7 @@ public class PlayerController : MonoBehaviour
         GetComponent<Renderer>().material.color = Color.red;
         //hasar almayý engelle:
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(1f);
 
         //eski renge döndürmek için
         GetComponent<Renderer>().material.color = originalColor;
@@ -312,14 +354,42 @@ public class PlayerController : MonoBehaviour
     private void CenterPlayer()
     {
         // oyuncuyu merkze doðru hareket ettirmek için:
-        Vector3 targetPosition = new Vector3(0f, transform.position.y, transform.position.z);
-        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 2f);
+        Vector3 targetPosition = new Vector3(2.3f, transform.position.y, transform.position.z);
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 6f);
 
        //oyuncu merkeze yaklaþtý mý 
         if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
         {
             isCentering = false;
         }
+    }
+
+
+    private void RotatePlayerDirectly()
+    {
+        // Alt ok tuþuna basýldýðýnda rotasyonu -38.58'e ayarla
+        transform.rotation = Quaternion.Euler(-20, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+
+        // Belirli bir süre sonra eski rotasyona dönmesi için Invoke fonksiyonunu kullan
+        Invoke("ResetRotation", 1.5f);
+    }
+
+    private void ResetRotation()
+    {
+        // 1 saniye sonra eski rotasyona dön ilk önce bunu dene
+        //transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+
+        // 1 saniye sonra eski rotasyona dön
+        transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+
+        /* Karakterin yüksekliðini sabit tut (groundun altýna düþmesini önle)
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit))
+        {
+            float groundHeight = hit.point.y + 0.5f; // Ayarlamak istediðiniz yükseklik
+            transform.position = new Vector3(transform.position.x, groundHeight, transform.position.z);
+        }*/
+
     }
 
 }
