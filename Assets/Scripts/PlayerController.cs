@@ -33,7 +33,6 @@ public class PlayerController : MonoBehaviour
 
     public int maxHealth = 30; // maksimum can
     private int currentHealth; // mevcut can
-    //public Slider healthBar;
     public Image[] healthImages;
 
 
@@ -101,25 +100,13 @@ public class PlayerController : MonoBehaviour
         {
             RotatePlayerDirectly();
         }
-
-
-
-
-
-
         //hýzý arttýr
         IncreaseSpeed();
 
-        // Engelin üzerinden zýpladýktan sonrasý için  kontrol
-        //CheckIfGroundedAfterJump();
-       
+    
 
     }
     
-
-    
-
-
 
     void HandleMovementInput()
     {
@@ -196,6 +183,7 @@ public class PlayerController : MonoBehaviour
             {
                 // Bir engel ile çarpýþtýðýnda canýný düþür
                 TakeDamage();
+
                 //Oyuncunun rengini deðiþtir ve hasar almasýný engellemek için;
                 StartCoroutine(PlayerChangeColorAndDisableDamage());
             }
@@ -225,8 +213,6 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z); // Önce diðer yükseklik bileþenlerini sýfýrla
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // Zýplama kuvvetini ekle
         isGrounded = false;
-        //rb.AddForce(Vector3.up * jumpForce);
-        //isGrounded = false;
         hasJumped = true;
 
 
@@ -247,96 +233,80 @@ public class PlayerController : MonoBehaviour
 
     }
 
-        private void StopSliding()
-        {
-            // Kayma animasyonunu durdur
-            isSliding = false;
-           
-
-        }
-
-
-
-    /* private void MoveSideways(float input)
-     {
-         float newPosition = transform.position.x + input * slideSpeed;
-       transform.position = new Vector3(newPosition, transform.position.y, transform.position.z);
-     }*/
-
     private void MoveForward()
-        {
-         Vector3 forwardMovement = transform.forward *forwardSpeed* Time.deltaTime;
-         rb.MovePosition(rb.position + forwardMovement);
+    {
+       Vector3 forwardMovement = transform.forward *forwardSpeed* Time.deltaTime;
+       rb.MovePosition(rb.position + forwardMovement);
 
 
-        }
+    }
 
         /// <summary>
         /// oyuncunun hýzý ile ilgili kýsým
         /// </summary>
-        private void IncreaseSpeed()
-        {
-            //oyuncunun hýzýný arttýrmak için;
-            forwardSpeed += accelerationRate * Time.fixedDeltaTime;
+   private void IncreaseSpeed()
+   {
+      //oyuncunun hýzýný arttýrmak için;
+       forwardSpeed += accelerationRate * Time.fixedDeltaTime;
 
-            //oyuncunun hýzýný sýnýrlamak için;
+       //oyuncunun hýzýný sýnýrlamak için;
 
-            forwardSpeed = Mathf.Clamp( forwardSpeed, initialForwardSpeed, maxForwardSpeed);
-        }
+       forwardSpeed = Mathf.Clamp( forwardSpeed, initialForwardSpeed, maxForwardSpeed);
+    }
 
 
-        private void CheckIfGroundedAfterJump()
-        {
-            // Raycast kullanarak karakterin zemine düzgün bir þekilde indiðini kontrol etme
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.down, out hit, raycastDistance))
+  private void CheckIfGroundedAfterJump()
+  {
+    // Raycast kullanarak karakterin zemine düzgün bir þekilde indiðini kontrol etme
+       RaycastHit hit;
+      if (Physics.Raycast(transform.position, Vector3.down, out hit, raycastDistance))
+      {
+            float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+            if (slopeAngle < 45f && hit.collider.CompareTag("Ground"))
             {
-                float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
-                if (slopeAngle < 45f && hit.collider.CompareTag("Ground"))
-                {
-                    isGrounded = true;
-                }
+                isGrounded = true;
             }
-        }
+      }
+   }
 
 
-        /// <summary>
-        /// player hasar kontrolü için 
-        /// </summary>
+     /// <summary>
+     /// player hasar kontrolü için 
+     /// </summary>
 
-        void TakeDamage()
-        {
-            // Can sayýsýný azalt
-            currentHealth -= 10;
-            UpdateHealthBar();
+   void TakeDamage()
+   {
+      // Can sayýsýný azalt
+       currentHealth -= 10;
+        UpdateHealthBar();
 
-            Debug.Log("Can kaybý! Mevcut Can: " + currentHealth);
+       Debug.Log("Can kaybý! Mevcut Can: " + currentHealth);
 
-            // Can sýfýr olduðunda ölüm iþlemlerini gerçekleþtir
-            if (currentHealth <= 0)
-            {
-                GameManager.gameOver = true;
-                playerScore.SetRunningState(false);
-                Debug.Log("isruning false");
-
-
-            }
-
-
-        }
-
-        void UpdateHealthBar()
-        {
-            float healthPercentage = (float)currentHealth / maxHealth;
-          int imagesToHide = Mathf.RoundToInt((1 - healthPercentage) * healthImages.Length);
-
-           for (int i = 0; i < healthImages.Length; i++)
-          {
-            healthImages[i].enabled = (i >= imagesToHide);
-           }
+        // Can sýfýr olduðunda ölüm iþlemlerini gerçekleþtir
+         if (currentHealth <= 0)
+         {
+             GameManager.gameOver = true;
+             playerScore.SetRunningState(false);
+             Debug.Log("isruning false");
 
 
          }
+
+
+   }
+
+   void UpdateHealthBar()
+   {
+        float healthPercentage = (float)currentHealth / maxHealth;
+        int imagesToHide = Mathf.RoundToInt((1 - healthPercentage) * healthImages.Length);
+
+        for (int i = 0; i < healthImages.Length; i++)
+        {
+           healthImages[i].enabled = (i >= imagesToHide);
+        }
+
+
+   }
     IEnumerator PlayerChangeColorAndDisableDamage()
     {
         playerCanTakeDamage = false;
@@ -376,19 +346,17 @@ public class PlayerController : MonoBehaviour
 
     private void ResetRotation()
     {
-        // 1 saniye sonra eski rotasyona dön ilk önce bunu dene
-        //transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-
+      
         // 1 saniye sonra eski rotasyona dön
         transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
 
-        /* Karakterin yüksekliðini sabit tut (groundun altýna düþmesini önle)
+         //Karakterin yüksekliðini sabit tut (groundun altýna düþmesini önle)
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit))
         {
             float groundHeight = hit.point.y + 0.5f; // Ayarlamak istediðiniz yükseklik
             transform.position = new Vector3(transform.position.x, groundHeight, transform.position.z);
-        }*/
+        }
 
     }
 
