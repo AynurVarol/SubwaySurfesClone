@@ -5,28 +5,42 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
-{ 
+{  
     /// <summary>
 ///  oyuncunun caný bitince gelecek gameover ekraný
 ///  oyunu tekrar baþlatmak ve oyundan tamamen çýkmak için gerekli kodlar
 /// </summary>
 /// 
     public static bool gameOver;
-    public GameObject gameOverPanel;
-
     public static int numberOfCoins;
+
     public Text coinsText;
     public Text scoreText;
+    public GameObject gameOverPanel;
+    public GameObject startCanvas;
+    public Button startButton;
+
     private PlayerScore playerScore;
 
    
     void Start()
-    {
+    { 
+        // Oyun baþladýðýnda Start panelini göster
+        startCanvas.SetActive(true);
+
+        Time.timeScale = 0;
+
+
+        // Start butonuna týklama 
+        startButton.onClick.AddListener(StartGame);
         gameOver = false;
-        //playerScore = FindObjectOfType<PlayerScore>();
+       
         playerScore = GetComponent<PlayerScore>();
         numberOfCoins = 0;
 
+        gameOverPanel.SetActive(false);
+       
+       
         //Oyun baþladýðýnda skoru sýfýrla
         if (playerScore != null)
         {
@@ -37,7 +51,20 @@ public class GameManager : MonoBehaviour
 
     }
 
-   
+    void StartGame()
+    {
+    
+        Debug.Log("Oyun baþlatýlýyor!");
+
+        // Oyun baþladýðýnda Start panelini kapat
+        startCanvas.SetActive(false);
+        Time.timeScale = 1;
+        
+       
+    }
+
+
+
     public void Update()
     {
         if (gameOver)
