@@ -4,8 +4,8 @@ Bu proje, Unity de 3D olarak C# ile geliştirilmiş bir Subway Surfers klonudur.
 ## Özellikler
 
 ### Oyun Kontrolleri
-- **Başlatma ve Kontroller:** Oyuna başlayabilmek için "Start" butonuna tıklayın. Oyuncu sol, sağ, yukarı ve aşağı ok tuşları ile kontol edilmektedir.
-- **Hareket Kontrolleri:** Sol ve sağ ok tuşları ile sağa ve sola yatay hareketleri, üst ok tuşu ile zıplama, alt ok tuşu ile engellerin altından geçebilme ve "c" tuşu ile ise oyuncunun merkez şeride konumlandırılma hareketleri gerçekleştirilir.
+- **Başlatma ve Kontroller:** Oyuna başlayabilmek için "Start" butonuna tıklayın. Oyuncu klavyede bulunan "A" ve "D" tuşları ile yukarı ve aşağı ok tuşları ile kontol edilmektedir.
+- **Hareket Kontrolleri:** Sola gitmek için klavyedeki "A" ve sağa gitmek için "D"tuşları ile sağa ve sola yatay hareketleri ve oyuncunun merkez şeride konumlandırılma hareketleride yine klavyede bulunan "A" ve "D" tuşları ile gerçekleştrilmektedir.Üst ok tuşu ile zıplama, alt ok tuşu ile engellerin altından geçebilme işlemleri gerçekleştirilir.
 
 ### Oyun Mekaniği
 - **Sonsuz Oyun:** Oyun, ileri gitmek için bir tuş kontrolüne ihtiyaç duymadan sonsuz bir şekilde ilerlemektedir.
